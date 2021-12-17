@@ -1,0 +1,6 @@
+*/.vagrant
+.vagrant
+*.vmdk
+*.log
+.DS_Store
+.backup

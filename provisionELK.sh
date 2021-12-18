@@ -10,7 +10,7 @@ echo ""
 echo "Realizando particionado del disco extra..." 
 parted -s /dev/sdc mklabel gpt \
   mkpart partELK ext4 2048s 2097118s \
-  set a1 lvm on
+  set 1 lvm on
 
 #Creación del volúmen lógico que almacenará la BBDD:
 echo "Creando el volúmen lógico para almacenar la BBDD..."
@@ -70,8 +70,8 @@ tee /etc/logstash/conf.d/30-elasticsearch-output.conf <<AAA
     output {
      elasticsearch {
       hosts => ["localhost:9200"]
-       manage_template => false
-       index => "%{[@metadata][beat]}-%{[@metadata][version]}-%{+YYYY.MM.dd}"
+      manage_template => false
+      index => "%{[@metadata][beat]}-%{[@metadata][version]}-%{+YYYY.MM.dd}"
      }
     }
 AAA
@@ -118,7 +118,6 @@ GOAL
 #texto plano la contraseña que será encriptada:
 echo "Generando fichero de contraseñas para Kibana..."
 echo "kibanaadmin:$(openssl passwd -apr1 -in /vagrant/.kibana)" | tee -a /etc/nginx/htpasswd.users
-#rm /vagrant/.kibana
 systemctl restart nginx
 systemctl restart kibana
 echo ""

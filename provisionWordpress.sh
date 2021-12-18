@@ -126,10 +126,10 @@ tee mycommands.sed <<END
 /type: filestream/s/filestream/log/
 s/^..enabled: false/  enabled: true/
 /^..paths:/r mypaths
-s/^output.elasticsearch:/#output.elasticsearch:/
 /#output.logstash:/s/#//
 s!^..#hosts: \["localhost:5044"\]!  hosts: \["192.168.10.254:5044"\]!
 END
+
 sed -f mycommands.sed filebeat_backup.yml > filebeat.yml
 
 #Habilitando e iniciando el servicio de Filebeat:
@@ -140,3 +140,11 @@ echo ""
 echo "****Configuración terminada. VM1 - Wordpress: En servicio****"
 
 exit 0
+
+
+
+
+#Revisar esta línea de conmfiguración en /etc/filebeat/filebeat.yml:
+#  s/^output.elasticsearch:/#output.elasticsearch:/
+
+

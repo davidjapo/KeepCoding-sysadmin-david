@@ -19,7 +19,7 @@ Vagrant.configure("2") do |config|
     end
     wordpress.vm.network "private_network", ip: "192.168.10.253", nic_type: "virtio", virtualbox__intnet: "sysadmin"
     wordpress.vm.network "forwarded_port", guest: 80, host: 8080
-    wordpress.vm.provision "shell", path: "provisionWordpress.sh"
+    #wordpress.vm.provision "shell", path: "provisionWordpress.sh"
   end
     
   config.vm.define "elasticsearch" do |elasticsearch|
@@ -28,7 +28,7 @@ Vagrant.configure("2") do |config|
     elasticsearch.vm.hostname = "elasticsearch"
     elasticsearch.vm.provider "virtualbox" do |vb|
       vb.name = "ubuntu_ELK"
-      vb.memory = "3072"
+      vb.memory = "4096"
       vb.cpus = "1"
       vb.default_nic_type = "virtio"
       file_to_disk = "disk_elasticsearch.vmdk"
@@ -40,6 +40,6 @@ Vagrant.configure("2") do |config|
     elasticsearch.vm.network "private_network", ip: "192.168.10.254", nic_type: "virtio", virtualbox__intnet: "sysadmin"
     elasticsearch.vm.network "forwarded_port", guest: 80, host: 8081
     elasticsearch.vm.network "forwarded_port", guest: 9200, host: 9200
-    elasticsearch.vm.provision "shell", path: "provisionELK.sh"
+    #elasticsearch.vm.provision "shell", path: "provisionELK.sh"
   end
 end

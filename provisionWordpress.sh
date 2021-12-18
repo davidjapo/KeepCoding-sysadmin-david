@@ -30,30 +30,30 @@ mount -a
 
 #Actualizando el respositorio:
 echo "Realizando actualización del indice del repositorio de software APT..."
-apt-get update
+apt-get update >/dev/null 2>&1
 
 #Descargando e instalando nginx:
 echo "Instalando nginx..."
-apt-get install -y nginx
+apt-get install -y nginx >/dev/null 2>&1
 
 #Descargando e instalando mariadb:
 echo "Instalando maridb..."
-apt-get install -y mariadb-server mariadb-common
+apt-get install -y mariadb-server mariadb-common >/dev/null 2>&1
 
 #Descargando e instalando dependencias de php:
 echo "Instalando dependencias de php..."
 apt-get install -y php-fpm php-mysql expect php-curl php-gd \
-php-intl php-mbstring php-soap php-xml php-xmlrpc php-zip
+php-intl php-mbstring php-soap php-xml php-xmlrpc php-zip >/dev/null 2>&1
 
 #Configurando la instancia de wordpress en nginx:
 echo "Configurando la instancia de wordpress en nginx..."
-tee /etc/nginx/sites-available/wordpress <<EOF 
+tee /etc/nginx/sites-available/wordpress >/dev/null 2>&1 <<EOF 
 # Managed by installation script - Do not change
 server {
 listen 80;
 root /var/www/wordpress;
 index index.php index.html index.htm index.nginx-debian.html;
-server_name localhost sysadmin.cex;
+server_name localhost;
 location / {
 try_files \$uri \$uri/ =404;
 }
@@ -112,8 +112,8 @@ echo "Realizando descarga e instalación de Filebeat..."
 #Importando la Key de su repositorio y a continuación se añade el repositorio:
 wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
 echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-7.x.list
-apt-get update
-apt-get install -y filebeat
+apt-get update >/dev/null 2>&1
+apt-get install -y filebeat >/dev/null 2>&1
 filebeat modules enable system
 filebeat modules enable nginx
 
@@ -140,11 +140,3 @@ echo ""
 echo "****Configuración terminada. VM1 - Wordpress: En servicio****"
 
 exit 0
-
-
-
-
-#Revisar esta línea de conmfiguración en /etc/filebeat/filebeat.yml:
-#  s/^output.elasticsearch:/#output.elasticsearch:/
-
-

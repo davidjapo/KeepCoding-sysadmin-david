@@ -31,11 +31,11 @@ mount -a
 
 #Actualizando el respositorio:
 echo "Realizando actualización del indice del repositorio de software APT..."
-apt-get update
+apt-get update >/dev/null 2>&1
 
 #Descargando e instalando nginx y dependencias de JRE:
 echo "Instalando nginx y dependencias de Java JRE (sea paciente, puede tardar un par de minutos)..."
-apt-get install -y nginx default-jre
+apt-get install -y nginx default-jre >/dev/null 2>&1
 
 #Habilitando e iniciando el servicio de nginx:
 echo "Habilitando y levantando el servicio de nginx..."
@@ -46,27 +46,27 @@ echo "Realizando descarga e instalación de Logstash..."
 #Importando la Key del repositorio Elastic.co. A continuación se añade el repositorio:
 wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
 echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-7.x.list
-apt-get update
-apt-get install -y logstash
+apt-get update >/dev/null 2>&1
+apt-get install -y logstash >/dev/null 2>&1
 
 #Descargando e instalando Elasticsearch:
 echo "Realizando descarga e instalación de Elasticsearch..."
-apt-get install -y elasticsearch
+apt-get install -y elasticsearch >/dev/null 2>&1
 
 #Descargando e instalando Kibana:
 echo "Realizando descarga e instalación de Kibana..."
-apt-get install -y kibana
+apt-get install -y kibana >/dev/null 2>&1
 
 #Aplicando configuración personalizada para Logstash:
 echo "Aplicando configuración personalizada para Logstash..."
-tee /etc/logstash/conf.d/02-beats-input.conf <<END
+tee /etc/logstash/conf.d/02-beats-input.conf >/dev/null 2>&1 <<END
     input {
      beats {
       port => 5044
      }
     }
 END
-tee /etc/logstash/conf.d/30-elasticsearch-output.conf <<AAA
+tee /etc/logstash/conf.d/30-elasticsearch-output.conf >/dev/null 2>&1 <<AAA
     output {
      elasticsearch {
       hosts => ["localhost:9200"]
@@ -75,7 +75,7 @@ tee /etc/logstash/conf.d/30-elasticsearch-output.conf <<AAA
      }
     }
 AAA
-tee /etc/logstash/conf.d/10-syslog-filter.conf < /vagrant/logstash-syslog-filter.conf
+cp /vagrant/logstash-syslog-filter.conf /etc/logstash/conf.d/10-syslog-filter.conf
 
 
 #Habilitando e iniciando el servicio de Logstash:
@@ -95,7 +95,7 @@ systemctl enable kibana --now
 #Modificando la instancia default en nginx para redirijir el puerto 80 al puerto 80 de Kibana:
 echo "Modificando la instancia default en nginx para redirijir el puerto 80 y además aplicar una autenticación básica..."
 cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
-tee /etc/nginx/sites-available/default <<GOAL
+tee /etc/nginx/sites-available/default >/dev/null 2>&1 <<GOAL
 # Managed by installation script - Do not change
  server {
    listen 80;
@@ -114,10 +114,10 @@ tee /etc/nginx/sites-available/default <<GOAL
 GOAL
 
 #Generando fichero 'htpasswd.users' donde se especifica el usuario y contraseña encriptada para Kibana:
-#Será necesario tener un fichero con nombre '/vagrant/.kibana' en dicha ruta. Este archivo almacena en
-#texto plano la contraseña que será encriptada:
+#Será necesario tener un fichero con nombre '/vagrant/.kibana' en dicha ruta. 
+#Este archivo almacena en texto plano la contraseña que será encriptada:
 echo "Generando fichero de contraseñas para Kibana..."
-echo "kibanaadmin:$(openssl passwd -apr1 -in /vagrant/.kibana)" | tee -a /etc/nginx/htpasswd.users
+echo "kibanaadmin:$(openssl passwd -apr1 -in /vagrant/.kibana)" | tee -a /etc/nginx/htpasswd.users >/dev/null 2>&1
 systemctl restart nginx
 systemctl restart kibana
 echo ""

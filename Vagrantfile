@@ -2,6 +2,9 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
+  config.vm.customize ["modifyvm", :id, "--uart1", "0x3F8", "4"]
+  config.vm.customize ["modifyvm", :id, "--uartmode1", "file", File::NULL]
+  config.vm.network "forwarded_port", guest: 22, host: 2222, host_ip: "127.0.0.1", id: 'ssh'
   config.vm.define "wordpress" do |wordpress|
     wordpress.vm.box = "ubuntu/focal64"
     wordpress.vm.box_check_update = false

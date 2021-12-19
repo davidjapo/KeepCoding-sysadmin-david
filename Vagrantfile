@@ -3,8 +3,8 @@
 
 Vagrant.configure("2") do |config|
   config.ssh.insert_key = false
-  config.ssh.private_key_path = ["~/.ssh/id_rsa", "~/.vagrant.d/insecure_private_key"]
-  config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "~/.ssh/authorized_keys"
+  config.ssh.private_key_path = "vagrantRSA"
+  config.vm.provision "file", source: "vagrantRSA.pub", destination: "~/.ssh/authorized_keys"
   config.vm.define "wordpress" do |wordpress|
     wordpress.vm.box = "ubuntu/focal64"
     wordpress.vm.box_check_update = false

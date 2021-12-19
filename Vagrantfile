@@ -19,7 +19,7 @@ Vagrant.configure("2") do |config|
     end
     wordpress.vm.network "private_network", ip: "192.168.10.253", nic_type: "virtio", virtualbox__intnet: "sysadmin"
     wordpress.vm.network "forwarded_port", guest: 80, host: 8080
-    #wordpress.vm.provision "shell", path: "provisionWordpress.sh"
+    wordpress.vm.provision "shell", path: "provisionWordpress.sh"
   end
     
   config.vm.define "elasticsearch" do |elasticsearch|
@@ -40,6 +40,6 @@ Vagrant.configure("2") do |config|
     elasticsearch.vm.network "private_network", ip: "192.168.10.254", nic_type: "virtio", virtualbox__intnet: "sysadmin"
     elasticsearch.vm.network "forwarded_port", guest: 80, host: 8081
     elasticsearch.vm.network "forwarded_port", guest: 9200, host: 9200
-    #elasticsearch.vm.provision "shell", path: "provisionELK.sh"
+    elasticsearch.vm.provision "shell", path: "provisionELK.sh"
   end
 end

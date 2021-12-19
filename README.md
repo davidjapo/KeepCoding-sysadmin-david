@@ -1,5 +1,3 @@
-![Captura de pantalla de 2021-12-19 20-40-09](https://user-images.githubusercontent.com/67948236/146689175-5643e416-0bdc-472b-b72d-d3245f98257a.png)
-![Comprobacion captura kibana](https://user-images.githubusercontent.com/67948236/146689178-3db5646c-7154-4705-80a4-478715525f57.png)
 # sysadmin-david
 Practica sysadmin David De la Cruz Buendia:
 
@@ -20,4 +18,8 @@ Practica sysadmin David De la Cruz Buendia:
   User = kibanaadmin
   Pass = $K33P
 
-5.- Se adjunta captura de pantalla de comprobación de funcionamiento en kibana.
+5.- Se adjunta captura de pantalla de comprobación de funcionamiento en kibana:
+
+![Captura de pantalla de 2021-12-19 20-40-09](https://user-images.githubusercontent.com/67948236/146689175-5643e416-0bdc-472b-b72d-d3245f98257a.png)
+
+![Comprobacion captura kibana](https://user-images.githubusercontent.com/67948236/146689178-3db5646c-7154-4705-80a4-478715525f57.png)

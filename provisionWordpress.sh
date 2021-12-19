@@ -71,12 +71,14 @@ rm /etc/nginx/sites-enabled/default
 
 #Habilitando e iniciando el servicio de nginx y php:
 echo "Habilitando y levantando el servicio de nginx y php..."
-systemctl enable nginx --now
-systemctl enable php7.4-fpm --now
+if ! systemctl enable nginx --now; then echo "***EL COMANDO SE HA EJECUTADO CON ERRORES***"; fi
+if ! systemctl enable php7.4-fpm --now; then echo "***EL COMANDO SE HA EJECUTADO CON ERRORES***"; fi
+
+
 
 #Securizando mariadb:
 echo "Securizando mariadb..."
-mysql_secure_installation <<END
+mysql_secure_installation >/dev/null 2>&1 <<END
 
 n
 y
@@ -105,7 +107,8 @@ echo "Aplicando configuración de Wordpress..."
 cd /var/www/wordpress
 cat wp-config-sample.php | sed -e 's/database_name_here/wordpress/g; s/username_here/wordpressuser/g; s/password_here/keepcoding/g' > wp-config.php
 chown -R www-data:www-data /var/www/wordpress
-systemctl restart nginx
+if ! systemctl restart nginx --now; then echo "***EL COMANDO SE HA EJECUTADO CON ERRORES***"; fi
+
 
 #Descargando e instalando Filebeat:
 echo "Realizando descarga e instalación de Filebeat..."
@@ -122,10 +125,11 @@ echo "Aplicando configuración personalizada a Filebeat..."
 cd /etc/filebeat
 cp filebeat.yml filebeat_backup.yml
 echo -e "    - /var/log/nginx/*.log\n    - /var/log/mysql/*.log" > mypaths
-tee mycommands.sed <<END
+tee mycommands.sed >/dev/null 2>&1 <<END
 /type: filestream/s/filestream/log/
 s/^..enabled: false/  enabled: true/
 /^..paths:/r mypaths
+s/^output.elasticsearch:/#output.elasticsearch:/
 /#output.logstash:/s/#//
 s!^..#hosts: \["localhost:5044"\]!  hosts: \["192.168.10.254:5044"\]!
 END
@@ -134,7 +138,7 @@ sed -f mycommands.sed filebeat_backup.yml > filebeat.yml
 
 #Habilitando e iniciando el servicio de Filebeat:
 echo "Habilitando y levantando el servicio de Filebeat..."
-systemctl enable filebeat --now
+if ! systemctl enable filebeat --now; then echo "***EL COMANDO SE HA EJECUTADO CON ERRORES***"; fi
 
 echo ""
 echo "****Configuración terminada. VM1 - Wordpress: En servicio****"

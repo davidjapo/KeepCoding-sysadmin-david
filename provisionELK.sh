@@ -39,7 +39,7 @@ apt-get install -y nginx default-jre >/dev/null 2>&1
 
 #Habilitando e iniciando el servicio de nginx:
 echo "Habilitando y levantando el servicio de nginx..."
-systemctl enable nginx --now
+if ! systemctl enable nginx --now; then echo "***EL COMANDO SE HA EJECUTADO CON ERRORES***"; fi
 
 #Descargando e instalando Logstash:
 echo "Realizando descarga e instalación de Logstash..."
@@ -80,17 +80,17 @@ cp /vagrant/logstash-syslog-filter.conf /etc/logstash/conf.d/10-syslog-filter.co
 
 #Habilitando e iniciando el servicio de Logstash:
 echo "Habilitando y levantando el servicio de Logstash (sea paciente, puede tardar unos minutos))..."
-systemctl enable logstash --now
+if ! systemctl enable logstash --now; then echo "***EL COMANDO SE HA EJECUTADO CON ERRORES***"; fi
 
 #Habilitando e iniciando el servicio de Elasticsearch:
 echo "Habilitando y levantando el servicio de ElasticSearch (sea paciente, puede tardar unos minutos))..."
 chown -R elasticsearch:elasticsearch /var/lib/elasticsearch
 chmod -R 754 /var/lib/elasticsearch
-systemctl enable elasticsearch --now
+if ! systemctl enable elasticsearch --now; then echo "***EL COMANDO SE HA EJECUTADO CON ERRORES***"; fi
 
 #Habilitando e iniciando el servicio de Kibana:
 echo "Habilitando y levantando el servicio de Kibana (sea paciente, puede tardar unos minutos))..."
-systemctl enable kibana --now
+if ! systemctl enable kibana --now; then echo "***EL COMANDO SE HA EJECUTADO CON ERRORES***"; fi
 
 #Modificando la instancia default en nginx para redirijir el puerto 80 al puerto 80 de Kibana:
 echo "Modificando la instancia default en nginx para redirijir el puerto 80 y además aplicar una autenticación básica..."
@@ -118,8 +118,9 @@ GOAL
 #Este archivo almacena en texto plano la contraseña que será encriptada:
 echo "Generando fichero de contraseñas para Kibana..."
 echo "kibanaadmin:$(openssl passwd -apr1 -in /vagrant/.kibana)" | tee -a /etc/nginx/htpasswd.users >/dev/null 2>&1
-systemctl restart nginx
-systemctl restart kibana
+if ! systemctl restart nginx; then echo "***EL COMANDO SE HA EJECUTADO CON ERRORES***"; fi
+if ! systemctl restart kibana; then echo "***EL COMANDO SE HA EJECUTADO CON ERRORES***"; fi
+
 echo ""
 echo "****Configuración terminada. VM2 - ELK: En servicio****"
 

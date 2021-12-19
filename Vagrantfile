@@ -2,7 +2,6 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  config.vm.boot_timeout = 800
   config.vm.define "wordpress" do |wordpress|
     wordpress.vm.box = "ubuntu/focal64"
     wordpress.vm.box_check_update = false

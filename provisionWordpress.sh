@@ -9,7 +9,7 @@ echo ""
 echo "Realizando particionado del disco extra..."
 parted -s /dev/sdc mklabel gpt \
   mkpart part_BBDD ext4 2048s 2097118s \
-  set 1 lvm on
+  set 1 lvm on >/dev/null 2>&1
 
 #Creación del volúmen lógico que almacenará la BBDD:
 echo "Creando el volúmen lógico para almacenar la BBDD..."
@@ -37,7 +37,7 @@ echo "Instalando nginx..."
 apt-get install -y nginx >/dev/null 2>&1
 
 #Descargando e instalando mariadb:
-echo "Instalando maridb..."
+echo "Instalando mariadb..."
 apt-get install -y mariadb-server mariadb-common >/dev/null 2>&1
 
 #Descargando e instalando dependencias de php:
@@ -99,8 +99,8 @@ HEREDOC
 
 #Descargando y descomprimiento el CMS Wordpress:
 echo "Descargando e instalando el CMS Wordpress..."
-cd /tmp && wget https://wordpress.org/latest.tar.gz
-cd /var/www/ && tar -xzvf /tmp/latest.tar.gz
+cd /tmp && wget https://wordpress.org/latest.tar.gz >/dev/null 2>&1
+cd /var/www/ && tar -xzvf /tmp/latest.tar.gz >/dev/null 2>&1
 
 #Aplicando configuración de Wordpress:
 echo "Aplicando configuración de Wordpress..."

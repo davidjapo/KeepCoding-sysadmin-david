@@ -10,13 +10,11 @@ Practica sysadmin David De la Cruz Buendia:
 3.- Acceso Wordpress:
   URL = http://167.172.61.249/
         http://167.172.61.249/wp-login.php
-  User = sysadmin
-  Pass = ^8ouUjWAaV7BCmYV3G%CCFlg
+
 
 4.- Acceso Kibana:
   URL = http://46.101.40.158/
-  User = kibanaadmin
-  Pass = $K33P
+
 
 5.- Se adjunta captura de pantalla de comprobación de funcionamiento en kibana:
 
